@@ -4,13 +4,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import android.view.View;
 import android.webkit.WebView;
 import android.os.Bundle;
 import android.webkit.WebViewClient;
 import android.webkit.WebSettings;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.widget.Toast;
+import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
     private WebView mywebview;
@@ -37,9 +38,19 @@ public class MainActivity extends AppCompatActivity {
                 if (webView.canGoBack()) {
                     webView.goBack();
                 }
+                ImageView imgView = (ImageView) findViewById(R.id.image);
+                imgView.setVisibility(View.VISIBLE);
+
+                imgView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                        startActivity(getIntent());
+                    }
+                });
 
                 webView.loadUrl("about:blank");
-                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                /*AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
                 alertDialog.setTitle("Error");
                 alertDialog.setMessage("Check your internet connection and try again.");
                 alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Try Again", new DialogInterface.OnClickListener() {
@@ -49,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                alertDialog.show();
+                alertDialog.show();*/
                 super.onReceivedError(webView, errorCode, description, failingUrl);
             }
         });

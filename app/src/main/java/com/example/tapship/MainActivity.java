@@ -1,32 +1,60 @@
 package com.example.tapship;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-
 import android.view.View;
+import android.view.Window;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.os.Bundle;
 import android.webkit.WebViewClient;
 import android.webkit.WebSettings;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    private WebView mywebview;
+    WebView mywebview;
+    ImageView imageView;
+    ProgressBar progressBar;
+    TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mywebview = (WebView) findViewById(R.id.webView);
+        getSupportActionBar().setTitle("");
+        /*getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.driver);*/
+
+        mywebview = (WebView) findViewById(R.id.webview);
+
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        textView = findViewById(R.id.text);
         WebSettings webSettings = mywebview.getSettings();
         webSettings.setJavaScriptEnabled(true);
-
         mywebview.setWebViewClient(new WebViewClient());
-        mywebview.loadUrl("https://www.troupertech.com/");
+        mywebview.loadUrl("http://localhost/tapship/");
+        imageView = (ImageView) findViewById(R.id.image);
+
+        mywebview.setWebChromeClient(new WebChromeClient() {
+            public void onProgressChanged(WebView view, int progress) {
+                progressBar.setProgress(progress);
+                if (progress == 100) {
+                    progressBar.setVisibility(View.GONE);
+                    textView.setVisibility(View.GONE);
+                    mywebview.setVisibility(View.VISIBLE);
+
+                } else {
+                    progressBar.setVisibility(View.VISIBLE);
+                    textView.setVisibility(View.VISIBLE);
+                    mywebview.setVisibility(View.GONE);
+
+                }
+            }
+        });
 
         mywebview.setWebViewClient(new WebViewClient() {
             public void onReceivedError(WebView webView, int errorCode, String description, String failingUrl) {
@@ -38,10 +66,10 @@ public class MainActivity extends AppCompatActivity {
                 if (webView.canGoBack()) {
                     webView.goBack();
                 }
-                ImageView imgView = (ImageView) findViewById(R.id.image);
-                imgView.setVisibility(View.VISIBLE);
 
-                imgView.setOnClickListener(new View.OnClickListener() {
+                imageView.setVisibility(View.VISIBLE);
+
+                imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         finish();
@@ -50,17 +78,6 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 webView.loadUrl("about:blank");
-                /*AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
-                alertDialog.setTitle("Error");
-                alertDialog.setMessage("Check your internet connection and try again.");
-                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Try Again", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                        startActivity(getIntent());
-                    }
-                });
-
-                alertDialog.show();*/
                 super.onReceivedError(webView, errorCode, description, failingUrl);
             }
         });
@@ -70,13 +87,28 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
+            progressBar.setVisibility(View.VISIBLE);
+            textView.setVisibility(View.VISIBLE);
+
         }
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-
+            progressBar.setVisibility(View.VISIBLE);
+            textView.setVisibility(View.VISIBLE);
             view.loadUrl(url);
             return true;
+
+        }
+
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+
+            // TODO Auto-generated method stub
+            super.onPageFinished(view, url);
+            progressBar.setVisibility(View.GONE);
+            textView.setVisibility(View.GONE);
 
         }
     }
@@ -90,4 +122,5 @@ public class MainActivity extends AppCompatActivity {
                 super.onBackPressed();
             }
         }
+
 }

@@ -1,7 +1,10 @@
 package com.example.tapship;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+
+import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.webkit.WebChromeClient;
@@ -19,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageView;
     ProgressBar progressBar;
     TextView textView;
+    ActionBar actionBar;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -29,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
         /*getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.driver);*/
 
+        actionBar=getSupportActionBar();
+        actionBar.hide();
+
         mywebview = (WebView) findViewById(R.id.webview);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -36,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         WebSettings webSettings = mywebview.getSettings();
         webSettings.setJavaScriptEnabled(true);
         mywebview.setWebViewClient(new WebViewClient());
-        mywebview.loadUrl("http://localhost/tapship/");
+        mywebview.loadUrl("https://troupertech.com");
         imageView = (ImageView) findViewById(R.id.image);
 
         mywebview.setWebChromeClient(new WebChromeClient() {
@@ -46,11 +55,13 @@ public class MainActivity extends AppCompatActivity {
                     progressBar.setVisibility(View.GONE);
                     textView.setVisibility(View.GONE);
                     mywebview.setVisibility(View.VISIBLE);
+                    actionBar.show();
 
                 } else {
                     progressBar.setVisibility(View.VISIBLE);
                     textView.setVisibility(View.VISIBLE);
                     mywebview.setVisibility(View.GONE);
+                    actionBar.hide();
 
                 }
             }
@@ -89,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
             super.onPageStarted(view, url, favicon);
             progressBar.setVisibility(View.VISIBLE);
             textView.setVisibility(View.VISIBLE);
+            actionBar.hide();
 
         }
 
@@ -96,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             progressBar.setVisibility(View.VISIBLE);
             textView.setVisibility(View.VISIBLE);
+            actionBar.hide();
             view.loadUrl(url);
             return true;
 
@@ -109,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
             super.onPageFinished(view, url);
             progressBar.setVisibility(View.GONE);
             textView.setVisibility(View.GONE);
+            actionBar.show();
 
         }
     }

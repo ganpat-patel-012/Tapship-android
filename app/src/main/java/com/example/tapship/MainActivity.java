@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         WebSettings webSettings = mywebview.getSettings();
         webSettings.setJavaScriptEnabled(true);
         mywebview.setWebViewClient(new WebViewClient());
-        mywebview.loadUrl("https://troupertech.com");
+        mywebview.loadUrl("https://tapship.herokuapp.com/");
         imageView = (ImageView) findViewById(R.id.image);
 
         mywebview.setWebChromeClient(new WebChromeClient() {
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                     progressBar.setVisibility(View.GONE);
                     textView.setVisibility(View.GONE);
                     mywebview.setVisibility(View.VISIBLE);
-                    actionBar.show();
+                    actionBar.hide();
 
                 } else {
                     progressBar.setVisibility(View.VISIBLE);
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
             super.onPageFinished(view, url);
             progressBar.setVisibility(View.GONE);
             textView.setVisibility(View.GONE);
-            actionBar.show();
+            actionBar.hide();
 
         }
     }
